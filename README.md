@@ -23,5 +23,5 @@ The Dataset contains 10 Genres of music :
 
 ![Training Loss Plot](https://github.com/KunalVaidya99/Music-Genre-Classification/blob/master/musicgenre.PNG)
 
-So this the training and test accuracy obtained after 1500 epochs.
+So this the training and test accuracy obtained after 250 epochs.
 A simple DNN model is also showing quite good test accuracy due to data augmentation
