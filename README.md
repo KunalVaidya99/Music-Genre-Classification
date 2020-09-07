@@ -16,7 +16,7 @@ The Dataset contains 10 Genres of music :
 * Rock
 ## Dataset
 * Each Genre contains 100 audio files each of duration 30s.
-* The features are extracted by dividing the 30s file in 10 files 3s as this will create more data.
+* The features are extracted by dividing the 30s file in 10 files of 3s as this will create more data.
 * The Data is stored in features_3_sec.csv.This Data Augmentation really helps model learn better and it performes better on the test set.
 
 
