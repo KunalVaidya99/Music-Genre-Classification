@@ -20,7 +20,7 @@ The Dataset contains 10 Genres of music :
 * The Data is stored in features_3_sec.csv.This Data Augmentation really helps model learn better and it performes better on the test set.
 
 
-
+## Results
 ![Training Loss Plot](https://github.com/KunalVaidya99/Music-Genre-Classification/blob/master/musicgenre.PNG)
 
 So this the training and test accuracy obtained after 250 epochs.
