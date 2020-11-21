@@ -4,5 +4,5 @@ streamlit==0.71.0
 numpy==1.18.5
 pillow==7.0.0
 matplotlib==3.2.2
-librosa=0.6.3
+librosa==0.6.3
 pydub==0.24.1
