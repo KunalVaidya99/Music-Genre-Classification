@@ -24,7 +24,6 @@ import librosa
 import numpy as np
 import librosa.display
 from pydub import AudioSegment
-from mpldatacursor import datacursor
 import matplotlib.cm as cm
 from matplotlib.colors import Normalize
 
