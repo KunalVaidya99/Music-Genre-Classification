@@ -13,7 +13,8 @@ from keras.preprocessing.image import load_img,img_to_array
 st.write(""" # Music Genre Recognition 
 App """)
 
-st.write("This is a Web App to predict Genre of Music ")
+st.write("**This is a Web App to predict Genre of Music.**")
+st.write("On the backend of this Web App a Convolutional Neural Network Model is used.The Model was trained on Mel Spectrogram of Music Files in the GTZAN Dataset.")
 
 file = st.file_uploader("Please Upload Mp3 Audio File Here",
 type=["mp3"])
@@ -23,6 +24,9 @@ import librosa
 import numpy as np
 import librosa.display
 from pydub import AudioSegment
+from mpldatacursor import datacursor
+import matplotlib.cm as cm
+from matplotlib.colors import Normalize
 
 class_labels = ['blues',
  'classical',
@@ -122,22 +126,38 @@ def predict(image_data,model):
   class_label = np.argmax(prediction)
 
   
-
   return class_label,prediction
 
 if file is None:
   st.text("Please upload an mp3 file")
 else:
   convert_mp3_to_wav(file)
-  extract_relevant("/content/music_file.wav",20,30)
+  extract_relevant("/content/music_file.wav",40,50)
   create_melspectrogram("/content/extracted.wav") 
   image_data = load_img('/content/melspectrogram.png',color_mode='rgba',target_size=(288,432))
-
-  class_label,prediction = predict(image_data,model)
-
-  st.write("The Genre of Song is "+class_labels[class_label])
-   
-  prediction = prediction.reshape((9,)) 
   
-  st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
-  st.write(prediction)
+  button = st.button("Predict The Genre of My Music!")
+  
+  if(button):
+
+    class_label,prediction = predict(image_data,model)
+
+    st.write("## The Genre of Song is "+class_labels[class_label])
+
+    prediction = prediction.reshape((9,)) 
+  
+    color_data = [1,2,3,4,5,6,7,8,9]
+    my_cmap = cm.get_cmap('jet')
+    my_norm = Normalize(vmin=0, vmax=9)
+
+    fig,ax= plt.subplots(figsize=(6,4.5))
+    ax.bar(x=class_labels,height=prediction,
+    color=my_cmap(my_norm(color_data)))
+    plt.xticks(rotation=45)
+    ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
+  
+    plt.show()
+    st.pyplot(fig)
+
+    #st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
+    #st.write(prediction)
