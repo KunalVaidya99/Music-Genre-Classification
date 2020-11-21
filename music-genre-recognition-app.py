@@ -88,17 +88,17 @@ def GenreModel(input_shape = (288,432,4),classes=9):
   return model
 
 model = GenreModel(input_shape=(288,432,4),classes=9)
-model.load_weights("/content/gdrive/MyDrive/genre.h5")
+model.load_weights("genre.h5")
 
 
 def convert_mp3_to_wav(music_file):
   sound = AudioSegment.from_mp3(music_file)
-  sound.export("/content/music_file.wav",format="wav")
+  sound.export("/app/music_file.wav",format="wav")
 
 def extract_relevant(wav_file,t1,t2):
   wav = AudioSegment.from_wav(wav_file)
   wav = wav[1000*t1:1000*t2]
-  wav.export("/content/extracted.wav",format='wav')
+  wav.export("/app/extracted.wav",format='wav')
 
 def create_melspectrogram(wav_file):
   y,sr = librosa.load(wav_file,duration=3)
@@ -107,7 +107,7 @@ def create_melspectrogram(wav_file):
   fig = plt.Figure()
   canvas = FigureCanvas(fig)
   p = plt.imshow(librosa.power_to_db(mels,ref=np.max))
-  plt.savefig(f'/content/melspectrogram.png')
+  plt.savefig('/app/melspectrogram.png')
 
 
 def predict(image_data,model):
@@ -131,9 +131,9 @@ if file is None:
   st.text("Please upload an mp3 file")
 else:
   convert_mp3_to_wav(file)
-  extract_relevant("/content/music_file.wav",40,50)
-  create_melspectrogram("/content/extracted.wav") 
-  image_data = load_img('/content/melspectrogram.png',color_mode='rgba',target_size=(288,432))
+  extract_relevant("/app/music_file.wav",40,50)
+  create_melspectrogram("/app/extracted.wav") 
+  image_data = load_img('/app/melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
   button = st.button("Predict The Genre of My Music!")
   
