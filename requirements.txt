@@ -66,7 +66,6 @@ s3transfer==0.3.3
 Send2Trash==1.5.0
 setuptools==41.2.0
 six==1.14.0
-streamlit==0.59.0
 terminado==0.8.3
 testpath==0.4.4
 toml==0.10.0
