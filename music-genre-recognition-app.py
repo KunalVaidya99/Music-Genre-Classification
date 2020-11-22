@@ -1,20 +1,23 @@
 import streamlit as st
-from keras import layers
-from keras.layers import (Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, 
-                          Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,
-                          Dropout)
-from keras.models import Model, load_model
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from keras.initializers import glorot_uniform
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing.image import load_img,img_to_array
-
 st.write(""" # Music Genre Recognition 
 App """)
 
+st.write("Made By Kunal Vaidya")
 st.write("**This is a Web App to predict Genre of Music.**")
 st.write("On the backend of this Web App a Convolutional Neural Network Model is used.The Model was trained on Mel Spectrogram of Music Files in the GTZAN Dataset.")
+
+
+page_bg_img = '''
+<style>
+body {
+background-image: url("https://images.unsplash.com/photo-1421217336522-861978fdf33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");
+background-size: cover;
+}
+</style>
+'''
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
 
 file = st.file_uploader("Please Upload Mp3 Audio File Here",
 type=["mp3"])
@@ -27,6 +30,21 @@ from pydub import AudioSegment
 import matplotlib.cm as cm
 from matplotlib.colors import Normalize
 
+from keras import layers
+from keras.layers import (Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, 
+                          Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,
+                          Dropout)
+from keras.models import Model, load_model
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from keras.initializers import glorot_uniform
+from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import load_img,img_to_array
+
+AudioSegment.converter = "/usr/local/bin/ffmpeg/ffmpeg"
+AudioSegment.ffmpeg = "/usr/local/bin/ffmpeg/ffmpeg"
+AudioSegment.ffprobe ="/usr/local/bin/ffmpeg/ffprobe"
+
 class_labels = ['blues',
  'classical',
  'country',
@@ -36,6 +54,7 @@ class_labels = ['blues',
  'pop',
  'reggae',
  'rock']
+
 
 def GenreModel(input_shape = (288,432,4),classes=9):
  
@@ -93,12 +112,12 @@ model.load_weights("genre.h5")
 
 def convert_mp3_to_wav(music_file):
   sound = AudioSegment.from_mp3(music_file)
-  sound.export("app/music_file.wav",format="wav")
+  sound.export("music_file.wav",format="wav")
 
 def extract_relevant(wav_file,t1,t2):
   wav = AudioSegment.from_wav(wav_file)
   wav = wav[1000*t1:1000*t2]
-  wav.export("app/extracted.wav",format='wav')
+  wav.export("extracted.wav",format='wav')
 
 def create_melspectrogram(wav_file):
   y,sr = librosa.load(wav_file,duration=3)
@@ -107,7 +126,7 @@ def create_melspectrogram(wav_file):
   fig = plt.Figure()
   canvas = FigureCanvas(fig)
   p = plt.imshow(librosa.power_to_db(mels,ref=np.max))
-  plt.savefig('app/melspectrogram.png')
+  plt.savefig('melspectrogram.png')
 
 
 def predict(image_data,model):
@@ -131,10 +150,13 @@ if file is None:
   st.text("Please upload an mp3 file")
 else:
   convert_mp3_to_wav(file)
-  extract_relevant("app/music_file.wav",40,50)
-  create_melspectrogram("app/extracted.wav") 
-  image_data = load_img('app/melspectrogram.png',color_mode='rgba',target_size=(288,432))
+  extract_relevant("music_file.wav",40,50)
+  create_melspectrogram("extracted.wav") 
+  image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
+  st.write("**Play the Song Below if you want!**")
+  st.audio(file,"audio/mp3")
+
   button = st.button("Predict The Genre of My Music!")
   
   if(button):
@@ -142,7 +164,7 @@ else:
     class_label,prediction = predict(image_data,model)
 
     st.write("## The Genre of Song is "+class_labels[class_label])
-
+    
     prediction = prediction.reshape((9,)) 
   
     color_data = [1,2,3,4,5,6,7,8,9]
