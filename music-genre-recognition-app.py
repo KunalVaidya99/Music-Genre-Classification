@@ -127,7 +127,7 @@ def create_melspectrogram(wav_file):
 
 def download_image():
   filename = file.name
-  filename = str.split(filename,".")[0]
+  filename = str.split(filename,"(")[0]
   downloader.download(filename + "Spotify", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
   return filename
 
