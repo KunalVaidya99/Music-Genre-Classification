@@ -159,33 +159,31 @@ else:
   
   filename = download_image()
   st.write("The Song You have Choosen Is " +filename )
-  st.write("**Please Press Button Below Predict Genre of my Music!**")
   st.image(filename +" Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
 
-  button = st.button("Predict The Genre of My Music!")
+  #button = st.button("Predict The Genre of My Music!")
   
-  if(button):
+  #if(button):
+  class_label,prediction = predict(image_data,model)
 
-    class_label,prediction = predict(image_data,model)
-
-    st.write("## The Genre of Song is "+class_labels[class_label])
+  st.write("## The Genre of Song is "+class_labels[class_label])
     
-    prediction = prediction.reshape((9,)) 
+  prediction = prediction.reshape((9,)) 
   
-    color_data = [1,2,3,4,5,6,7,8,9]
-    my_cmap = cm.get_cmap('jet')
-    my_norm = Normalize(vmin=0, vmax=9)
+  color_data = [1,2,3,4,5,6,7,8,9]
+  my_cmap = cm.get_cmap('jet')
+  my_norm = Normalize(vmin=0, vmax=9)
 
-    fig,ax= plt.subplots(figsize=(6,4.5))
-    ax.bar(x=class_labels,height=prediction,
-    color=my_cmap(my_norm(color_data)))
-    plt.xticks(rotation=45)
-    ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
+  fig,ax= plt.subplots(figsize=(6,4.5))
+  ax.bar(x=class_labels,height=prediction,
+  color=my_cmap(my_norm(color_data)))
+  plt.xticks(rotation=45)
+  ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
   
-    plt.show()
-    st.pyplot(fig)
+  plt.show()
+  st.pyplot(fig)
 
     #st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
     #st.write(prediction)
