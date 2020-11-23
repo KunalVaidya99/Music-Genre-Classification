@@ -1,11 +1,22 @@
 import streamlit as st
+from keras import layers
+from keras.layers import (Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, 
+                          Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,
+                          Dropout)
+from keras.models import Model, load_model
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from keras.initializers import glorot_uniform
+from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import load_img,img_to_array
+from bing_image_downloader import downloader
+
 st.write(""" # Music Genre Recognition 
 App """)
 
 st.write("Made By Kunal Vaidya")
 st.write("**This is a Web App to predict Genre of Music.**")
 st.write("On the backend of this Web App a Convolutional Neural Network Model is used.The Model was trained on Mel Spectrogram of Music Files in the GTZAN Dataset.")
-
 
 page_bg_img = '''
 <style>
@@ -18,9 +29,10 @@ background-size: cover;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-
 file = st.file_uploader("Please Upload Mp3 Audio File Here",
 type=["mp3"])
+
+
 
 from PIL import Image
 import librosa
@@ -29,21 +41,6 @@ import librosa.display
 from pydub import AudioSegment
 import matplotlib.cm as cm
 from matplotlib.colors import Normalize
-
-from keras import layers
-from keras.layers import (Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, 
-                          Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,
-                          Dropout)
-from keras.models import Model, load_model
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from keras.initializers import glorot_uniform
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing.image import load_img,img_to_array
-
-AudioSegment.converter = "/usr/local/bin/ffmpeg/ffmpeg"
-AudioSegment.ffmpeg = "/usr/local/bin/ffmpeg/ffmpeg"
-AudioSegment.ffprobe ="/usr/local/bin/ffmpeg/ffprobe"
 
 class_labels = ['blues',
  'classical',
@@ -54,7 +51,6 @@ class_labels = ['blues',
  'pop',
  'reggae',
  'rock']
-
 
 def GenreModel(input_shape = (288,432,4),classes=9):
  
@@ -129,6 +125,13 @@ def create_melspectrogram(wav_file):
   plt.savefig('melspectrogram.png')
 
 
+def download_image():
+  filename = file.name
+  filename = str.split(filename,".")[0]
+  downloader.download(filename + " Spotify", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
+  return filename
+
+
 def predict(image_data,model):
 
   #image = image_data.resize((288,432))
@@ -154,6 +157,9 @@ else:
   create_melspectrogram("extracted.wav") 
   image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
+  filename = download_image()
+  st.write("**The Song You have Choosen Is ** " +filename )
+  st.image(filename +" Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
 
