@@ -185,5 +185,5 @@ else:
   plt.show()
   st.pyplot(fig)
 
-    #st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
-    #st.write(prediction)
+  #st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
+  #st.write(prediction)
