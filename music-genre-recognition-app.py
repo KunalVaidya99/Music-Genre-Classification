@@ -159,7 +159,7 @@ else:
   
   filename = download_image()
   st.write("The Song You have Choosen Is " +filename )
-  st.write("**Please Press Button Predict Genre of my Music!**")
+  #st.write("**Please Press Button Predict Genre of my Music!**")
   st.image(filename +" Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
