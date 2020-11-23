@@ -2,7 +2,7 @@
 
 Music Genre Classification using GTZAN Dataset.Here is the Link to Dataset [GTZAN Dataset](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification)
 
-Here is the Link to Deployed App on Amazon EC2 For this Repo  [Music-Genre-Recognition-App](http://3.134.82.239:8501)
+Here is the Link to Deployed App on Amazon EC2 For this Repo  [Music-Genre-Recognition-App](http://ec2-3-134-82-239.us-east-2.compute.amazonaws.com:8501/)
 
 The Dataset contains 10 Genres of music :
 ## Genres
