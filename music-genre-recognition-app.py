@@ -158,7 +158,8 @@ else:
   image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
   filename = download_image()
-  st.write("**The Song You have Choosen Is ** " +filename )
+  st.write("The Song You have Choosen Is " +filename )
+  st.write("**Please Press Button Predict Genre of my Music!**")
   st.image(filename +" Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
