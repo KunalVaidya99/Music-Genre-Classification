@@ -11,6 +11,9 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing.image import load_img,img_to_array
 from bing_image_downloader import downloader
 
+
+
+
 st.write(""" # Music Genre Recognition 
 App """)
 
@@ -29,7 +32,7 @@ background-size: cover;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-file = st.file_uploader("Please Upload Mp3 Audio File Here",
+file = st.sidebar.file_uploader("Please Upload Mp3 Audio File Here or Use Demo Of App Below using Preloaded Music",
 type=["mp3"])
 
 
@@ -131,6 +134,9 @@ def download_image():
   downloader.download(filename + "Spotify", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
   return filename
 
+def download_image_demo(filename):
+  downloader.download(filename + "Spotify", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
+  
 
 def predict(image_data,model):
 
@@ -149,6 +155,59 @@ def predict(image_data,model):
   
   return class_label,prediction
 
+def show_output(songname):
+  convert_mp3_to_wav(songname + ".mp3")
+  extract_relevant("music_file.wav",40,50)
+  create_melspectrogram("extracted.wav") 
+  image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
+  
+  download_image_demo(songname)
+  st.write("The Song You have Choosen Is " +songname )
+  st.image(songname +"Spotify" + "/Image_1.jpg",use_column_width=True)
+  st.write("**Play the Song Below if you want!**")
+  st.audio(file,"audio/mp3")  
+
+  class_label,prediction = predict(image_data,model)
+
+  st.write("## The Genre of Song is "+class_labels[class_label])
+
+  spec_or_prob = st.sidebar.radio("Select one of Below",("Mel Spectrogram","Probability Distribution"))
+
+  prediction = prediction.reshape((9,)) 
+  
+  color_data = [1,2,3,4,5,6,7,8,9]
+  my_cmap = cm.get_cmap('jet')
+  my_norm = Normalize(vmin=0, vmax=9)
+
+
+  if(spec_or_prob =="Probability Distribution"):
+    fig,ax= plt.subplots(figsize=(6,4.5))
+    ax.bar(x=class_labels,height=prediction,
+    color=my_cmap(my_norm(color_data)))
+    plt.xticks(rotation=45)
+    ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
+  
+    plt.show()
+    st.pyplot(fig)
+
+  if(spec_or_prob=="Mel Spectrogram"):
+    st.image("melspectrogram.png",use_column_width=True)
+
+demo = st.sidebar.checkbox("Do You Want to check the App with Preloaded Music")
+
+if(demo):
+  
+  song = st.sidebar.radio("Which Song you Want to check?",("Green Day-American Idiot","Taylor Swift-Love Story","Nirvana-Smells Like Teen Spirit","Muse-Plug In Baby"))
+
+  if(song=="Green Day-American Idiot"):
+    show_output("Green Day-American Idiot") 
+  if(song=="Muse-Plug In Baby"):
+    show_output("Muse-Plug In Baby")
+  if(song=="Taylor Swift-Love Story"):
+    show_output("Taylor Swift-Love Story")
+  if(song=="Nirvana-Smells Like Teen Spirit"):
+    show_output("Nirvana-Smells Like Teen Spirit")
+
 if file is None:
   st.text("Please upload an mp3 file")
 else:
@@ -162,6 +221,7 @@ else:
   st.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
+  
 
   #button = st.button("Predict The Genre of My Music!")
   
@@ -169,21 +229,28 @@ else:
   class_label,prediction = predict(image_data,model)
 
   st.write("## The Genre of Song is "+class_labels[class_label])
-    
+
+  spec_or_prob = st.sidebar.radio("Select one of Below",("Mel Spectrogram","Probability Distribution"))
+
   prediction = prediction.reshape((9,)) 
   
   color_data = [1,2,3,4,5,6,7,8,9]
   my_cmap = cm.get_cmap('jet')
   my_norm = Normalize(vmin=0, vmax=9)
 
-  fig,ax= plt.subplots(figsize=(6,4.5))
-  ax.bar(x=class_labels,height=prediction,
-  color=my_cmap(my_norm(color_data)))
-  plt.xticks(rotation=45)
-  ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
+
+  if(spec_or_prob =="Probability Distribution"):
+    fig,ax= plt.subplots(figsize=(6,4.5))
+    ax.bar(x=class_labels,height=prediction,
+    color=my_cmap(my_norm(color_data)))
+    plt.xticks(rotation=45)
+    ax.set_title("Probability Distribution Of The Given Song Over Different Genres")
   
-  plt.show()
-  st.pyplot(fig)
+    plt.show()
+    st.pyplot(fig)
+
+  if(spec_or_prob=="Mel Spectrogram"):
+    st.image("melspectrogram.png",use_column_width=True)
 
   #st.text("Probability (0: Blues, 1: Classical, 2: Country,3: Disco,4: Hiphop,5: Metal,6: Pop,7: Reggae,8: Rock")
   #st.write(prediction)
