@@ -128,7 +128,7 @@ def create_melspectrogram(wav_file):
 def download_image():
   filename = file.name
   filename = str.split(filename,".")[0]
-  downloader.download(filename + " Spotify", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
+  downloader.download(filename + " Spotify Player", limit=1,  output_dir='/', adult_filter_off=True, force_replace=False, timeout=60)
   return filename
 
 
@@ -159,7 +159,7 @@ else:
   
   filename = download_image()
   st.write("**The Song You have Choosen Is ** " +filename )
-  st.image(filename +" Spotify" + "/Image_1.jpg",use_column_width=True)
+  st.image(filename +" Spotify Player" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
 
