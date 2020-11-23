@@ -171,7 +171,7 @@ def show_output(songname):
 
   st.write("## The Genre of Song is "+class_labels[class_label])
 
-  spec_or_prob = st.sidebar.radio("Select one of Below",("Mel Spectrogram","Probability Distribution"))
+  spec_or_prob = st.sidebar.radio("Select one of Below",("Probability Distribution","Mel Spectrogram"))
 
   prediction = prediction.reshape((9,)) 
   
