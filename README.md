@@ -2,7 +2,7 @@
 
 Music Genre Classification using GTZAN Dataset.Here is the Link to Dataset [GTZAN Dataset](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification)
 
-Here is the Link to Deployed App on Amazon EC2 For the Convolutional Neural Network (CNN) Model [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](http://ec2-3-134-82-239.us-east-2.compute.amazonaws.com:8501/)
+I Made a Web App using Streamlit For the Convolutional Neural Network (CNN) Model and Deployed it on Amazon EC2  [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](http://ec2-3-134-82-239.us-east-2.compute.amazonaws.com:8501/)
 
 The Dataset contains 10 Genres of music :
 ## Genres
