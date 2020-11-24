@@ -284,8 +284,8 @@ else:
   
   filename = download_image()
   st.write("The Song You have Choosen Is " +filename )
-  st.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
-  st.write("**Play the Song Below if you want!**")
+  st.sidebar.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
+  st.sidebar.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
   
   class_label,prediction = predict(image_data,model)
