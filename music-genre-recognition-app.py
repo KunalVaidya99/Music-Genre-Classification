@@ -11,7 +11,8 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing.image import load_img,img_to_array
 from bing_image_downloader import downloader
 
-
+from unsplash_search import UnsplashSearch
+unsplash = UnsplashSearch("C5OCp7HRCjNi9nr72kUXBpsY46mAPJizBcOrBEpA9EI")
 
 
 st.write(""" # Music Genre Recognition 
@@ -20,6 +21,18 @@ App """)
 st.write("Made By Kunal Vaidya")
 st.write("**This is a Web App to predict Genre of Music.**")
 st.write("On the backend of this Web App a Convolutional Neural Network Model is used.The Model was trained on Mel Spectrogram of Music Files in the GTZAN Dataset.")
+st.markdown(
+    f'''
+        <style>
+            .sidebar .sidebar-content {{
+                width: 450px;
+            }}
+        </style>
+    ''',
+    unsafe_allow_html=True
+)
+
+col1,col2 = st.sidebar.beta_columns(2)
 
 page_bg_img = '''
 <style>
@@ -32,10 +45,40 @@ background-size: cover;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
+
+st.sidebar.write("Check out Github Repo for this App and my LinkedIn Profile")
+
+background = st.sidebar.radio("Do You Want Use Default Background or Change?",("Default Background","Change Background"))
+
+
+if(background=="Default Background"):
+  pass
+if(background=="Change Background"):
+  img = unsplash.search_photo("best landscape photos")
+  img_url = img['img']
+  change = st.sidebar.button("Change Background of App")
+  if(change):
+    st.write("Photo By " + img['credits'] + " on Unsplash")
+    page_bg_img = '''
+    <style>
+    body {
+    background-image: url(''' +img_url+''');
+    background-size: cover;
+    }
+    </style>
+    '''
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
+linked_in = '''[![LinkedIn](https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/LinkedIn_Logo.svg/120px-LinkedIn_Logo.svg.png)](https://www.linkedin.com/in/kunal-vaidya-0bab51198/)'''
+col1.markdown(linked_in, unsafe_allow_html=True)
+
+github = '''[![LinkedIn](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/GitHub_logo_2013.svg/120px-GitHub_logo_2013.svg.png)](https://github.com/KunalVaidya99/Music-Genre-Classification)'''
+col2.markdown(github, unsafe_allow_html=True)
+
+
 file = st.sidebar.file_uploader("Please Upload Mp3 Audio File Here or Use Demo Of App Below using Preloaded Music",
 type=["mp3"])
-
-
 
 from PIL import Image
 import librosa
@@ -163,9 +206,9 @@ def show_output(songname):
   
   download_image_demo(songname)
   st.write("The Song You have Choosen Is " +songname )
-  st.image(songname +"Spotify" + "/Image_1.jpg",use_column_width=True)
+  st.sidebar.image(songname +"Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
-  st.audio(songname + ".mp3" ,"audio/mp3")  
+  st.sidebar.audio(songname + ".mp3" ,"audio/mp3")  
 
   class_label,prediction = predict(image_data,model)
 
@@ -222,10 +265,6 @@ else:
   st.write("**Play the Song Below if you want!**")
   st.audio(file,"audio/mp3")
   
-
-  #button = st.button("Predict The Genre of My Music!")
-  
-  #if(button):
   class_label,prediction = predict(image_data,model)
 
   st.write("## The Genre of Song is "+class_labels[class_label])
