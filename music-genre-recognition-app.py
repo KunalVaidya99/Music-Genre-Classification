@@ -228,9 +228,9 @@ def show_output(songname):
   image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
   download_image_demo(songname)
-  st.write("The Song You have Choosen Is " +songname )
+  st.sidebar.write("The Song You have Choosen Is " +songname )
   st.sidebar.image(songname +"Spotify" + "/Image_1.jpg",use_column_width=True)
-  st.write("**Play the Song Below if you want!**")
+  st.sidebar.write("**Play the Song Below if you want!**")
   st.sidebar.audio(songname + ".mp3" ,"audio/mp3")  
 
   class_label,prediction = predict(image_data,model)
@@ -283,10 +283,10 @@ else:
   image_data = load_img('melspectrogram.png',color_mode='rgba',target_size=(288,432))
   
   filename = download_image()
-  st.write("The Song You have Choosen Is " +filename )
+  st.sidebar.write("The Song You have Choosen Is " +filename )
   st.sidebar.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
   st.sidebar.write("**Play the Song Below if you want!**")
-  st.audio(file,"audio/mp3")
+  st.sidebar.audio(file,"audio/mp3")
   
   class_label,prediction = predict(image_data,model)
 
