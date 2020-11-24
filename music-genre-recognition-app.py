@@ -10,6 +10,7 @@ from keras.initializers import glorot_uniform
 from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing.image import load_img,img_to_array
 from bing_image_downloader import downloader
+from streamlit import caching
 
 from unsplash_search import UnsplashSearch
 unsplash = UnsplashSearch("C5OCp7HRCjNi9nr72kUXBpsY46mAPJizBcOrBEpA9EI")
@@ -25,7 +26,7 @@ st.markdown(
     f'''
         <style>
             .sidebar .sidebar-content {{
-                width: 400px;
+                width: 450px;
             }}
         </style>
     ''',
@@ -34,30 +35,37 @@ st.markdown(
 
 col1,col2 = st.sidebar.beta_columns(2)
 
-page_bg_img = '''
-<style>
-body {
-background-image: url("https://images.unsplash.com/photo-1421217336522-861978fdf33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");
-background-size: cover;
-}
-</style>
-'''
+@st.cache
+def get_url(query):
+  img = unsplash.search_photo(query)
+  img_url = img['img']
+  return img_url,img
 
-st.markdown(page_bg_img, unsafe_allow_html=True)
+def default_background():
+  page_bg_img = '''
+  <style>
+  body {
+  background-image: url("https://images.unsplash.com/photo-1421217336522-861978fdf33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");
+  background-size: cover;
+  }  
+  </style>
+  '''
+  st.markdown(page_bg_img, unsafe_allow_html=True)
 
+img_url,img = get_url("best landscape photos")
 
 st.sidebar.write("Check out Github Repo for this App and my LinkedIn Profile")
 
 background = st.sidebar.radio("Do You Want Use Default Background or Change?",("Default Background","Change Background"))
 
+def change_background():
 
-if(background=="Default Background"):
-  pass
-if(background=="Change Background"):
-  img = unsplash.search_photo("best landscape photos")
-  img_url = img['img']
   change = st.sidebar.button("Change Background of App")
+  
   if(change):
+    caching.clear_cache()
+    img_url,img = get_url("best landscape photos")
+    
     st.write("Photo By " + img['credits'] + " on Unsplash")
     page_bg_img = '''
     <style>
@@ -68,6 +76,21 @@ if(background=="Change Background"):
     </style>
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
+
+if(background=="Default Background"): 
+  default_background()
+if(background=="Change Background"):
+  page_bg_img = '''
+  <style>
+  body {
+  background-image: url(''' +img_url+''');
+  background-size: cover;
+  }
+  </style>
+  '''
+  st.markdown(page_bg_img, unsafe_allow_html=True)
+  change_background()
+
 
 
 linked_in = '''[![LinkedIn](https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/LinkedIn_Logo.svg/120px-LinkedIn_Logo.svg.png)](https://www.linkedin.com/in/kunal-vaidya-0bab51198/)'''
@@ -261,9 +284,9 @@ else:
   
   filename = download_image()
   st.write("The Song You have Choosen Is " +filename )
-  st.sidebar.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
+  st.image(filename +"Spotify" + "/Image_1.jpg",use_column_width=True)
   st.write("**Play the Song Below if you want!**")
-  st.sidebar.audio(file,"audio/mp3")
+  st.audio(file,"audio/mp3")
   
   class_label,prediction = predict(image_data,model)
 
